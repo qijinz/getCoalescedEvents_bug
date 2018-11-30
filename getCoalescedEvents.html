@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+<style>
+#target {
+  background-color:#f00;
+  touch-action: none;
+}
+</style>
+</head>
+<body>
+<canvas id="target" width="500" height="500"></canvas>
+<script>
+  var pointerdown = false;
+  var target = document.getElementById('target');
+  var context = target.getContext('2d');
+  target.addEventListener('pointerdown', (e) => {
+    pointerdown = true;
+    context.beginPath();
+    context.moveTo(e.x, e.y);
+  });
+  target.addEventListener('pointermove', (e) => {
+    if (pointerdown) {
+      e.getCoalescedEvents().forEach((pe) => {
+        context.lineTo(pe.offsetX, pe.offsetY);
+        context.stroke();
+      })
+    }
+  });
+  target.addEventListener('pointerup', (e) => {
+    context.closePath();
+    pointerdown = false;
+  });
+</script>
+</body>
+</html>
